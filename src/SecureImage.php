@@ -55,6 +55,13 @@ class SecureImage
         return $this;
     }
 
+    public function setFont(string $font): \StefanZ\LaravelSanctumCaptcha\SecureImage
+    {
+        $this->m_font = $font;
+
+        return $this;
+    }
+
     public function setLength(int $length): \StefanZ\LaravelSanctumCaptcha\SecureImage
     {
         $this->m_length = $length;

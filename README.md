@@ -9,4 +9,5 @@ The following attributes can be set via a simple Builder-Interface:
 - cipher (default is aes-128-gcm)
 - captcha length
 - background color
+- TTF-Font
 
