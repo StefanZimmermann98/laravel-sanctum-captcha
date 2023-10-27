@@ -1,0 +1,22 @@
+{
+    "name": "stefan-z/laravel-sanctum-captcha",
+    "description": "Create a captcha image for stateless laravel sanctim api's",
+    "type": "library",
+    "require": {
+        "php": "^8.2"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "StefanZ\\LaravelSanctumCaptcha\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Stefan Zimmermann",
+            "email": "stefan.zimmermann@eventanizer.events",
+            "homepage": "https://eventanizer.com",
+            "role": "Fullstack-Developer"
+        }
+    ]
+}
