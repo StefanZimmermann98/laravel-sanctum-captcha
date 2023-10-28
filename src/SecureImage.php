@@ -137,7 +137,7 @@ class SecureImage
         $calcmac = hash_hmac('sha256', $ciphertext_raw, $this->m_secret, $as_binary = true);
         if (hash_equals($hmac, $calcmac)) // Rechenzeitangriff-sicherer Vergleich
         {
-            return $input === $ciphertext;
+            return $input === $original_plaintext;
         }
 
         return FALSE;

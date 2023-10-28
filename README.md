@@ -11,3 +11,24 @@ The following attributes can be set via a simple Builder-Interface:
 - background color
 - TTF-Font
 
+# Example
+```
+$captcha = new SecureImage(env('CAPTCHA_SECRET'));
+        $captcha->setFont(__DIR__
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . 'resources'
+            . DIRECTORY_SEPARATOR . 'fonts'
+            . DIRECTORY_SEPARATOR . 'arial.ttf');
+
+        return $captcha->generateCaptcha();
+```
+
+```
+$captcha = new SecureImage(env('CAPTCHA_SECRET'));
+return $captcha->is_valid($user_input, $cipher_text_generated_with_captcha);
+```
+
+
+
