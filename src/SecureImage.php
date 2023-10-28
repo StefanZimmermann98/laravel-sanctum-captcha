@@ -6,9 +6,10 @@ class SecureImage
 {
 
     private $m_secret = NULL;
-    private $m_cipher = 'aes-128-gcm';
+    private $m_cipher = 'aes-128-cbc';
 
     private $m_width = 150;
+    private $m_padding = 15;
     private $m_height = 50;
     private $m_image = NULL;
     private $m_background = [255, 255, 255, 127];
@@ -71,13 +72,22 @@ class SecureImage
 
     public function generateCaptcha(): array
     {
-        $this->m_image = imagecreatetruecolor($this->m_width, $this->m_height);
+        $this->m_image = imagecreatetruecolor($this->m_width + (3 * $this->m_padding), $this->m_height + (2 * $this->m_padding));
         imagealphablending($this->m_image, true);
         imagesavealpha($this->m_image, true);
 
         $bg_color = imagecolorallocatealpha($this->m_image, $this->m_background[0], $this->m_background[1], $this->m_background[2], $this->m_background[3]);
         imagefill($this->m_image, 0, 0, $bg_color);
 
+        $line_color = imagecolorallocate($this->m_image, rand(0, 255), rand(0, 255), rand(0, 255));
+        for ($i = 0; $i < 10; $i++) {
+            imageline($this->m_image, 0, rand() % 50, 200, rand() % 50, $line_color);
+        }
+
+        $pixel_color = imagecolorallocate($this->m_image, rand(0, 255), rand(0, 255), rand(0, 255));
+        for ($i = 0; $i < 1000; $i++) {
+            imagesetpixel($this->m_image, rand() % 200, rand() % 50, $pixel_color);
+        }
 
         $captcha_text = "";
         for ($i = 0; $i < $this->m_length; $i++) {
@@ -85,8 +95,8 @@ class SecureImage
             $captcha_text .= $char;
 
 
-            $color = imagecolorallocate($this->m_image, 0, 0, 0);
-            imagettftext($this->m_image, $this->m_size, 0, 10 + $i * 30, 35, $color, $this->m_font, $char);
+            $color = imagecolorallocate($this->m_image, rand(0, 255), rand(0, 255), rand(0, 255));
+            imagettftext($this->m_image, rand(-3, 3) + $this->m_size, rand(-15, 15), ($i * 26) + $this->m_padding, $this->m_padding + 35, $color, $this->m_font, $char);
         }
 
         $ivlen = openssl_cipher_iv_length($this->m_cipher);
@@ -95,7 +105,7 @@ class SecureImage
         $hmac = hash_hmac('sha256', $ciphertext_raw, $this->m_secret, $as_binary = true);
         $this->m_ciphertext = base64_encode($iv . $hmac . $ciphertext_raw);
         ob_start();
-        imagepng($this->m_image);
+        imagejpeg($this->m_image);
         $content = ob_get_contents();
         ob_end_clean();
 

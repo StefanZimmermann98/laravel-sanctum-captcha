@@ -6,7 +6,7 @@ The base idea is the serve the user with an image and a encrypted text. Once dis
 
 The following attributes can be set via a simple Builder-Interface:
 - secret
-- cipher (default is aes-128-gcm)
+- cipher (default is aes-128-cbc)
 - captcha length
 - background color
 - TTF-Font
