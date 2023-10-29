@@ -18,6 +18,8 @@ class SecureImage
 
     private $m_characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ23456789";
     private $m_length = 7;
+    private $m_lines = 50;
+    private $m_dots = 1000;
 
     private $m_ciphertext = '';
 
@@ -63,9 +65,37 @@ class SecureImage
         return $this;
     }
 
+    public function setHeight(string $height): \StefanZ\LaravelSanctumCaptcha\SecureImage
+    {
+        $this->m_height = $height;
+
+        return $this;
+    }
+
+    public function setWidth(string $width): \StefanZ\LaravelSanctumCaptcha\SecureImage
+    {
+        $this->m_width = $width;
+
+        return $this;
+    }
+
     public function setLength(int $length): \StefanZ\LaravelSanctumCaptcha\SecureImage
     {
         $this->m_length = $length;
+
+        return $this;
+    }
+
+    public function setNumberOfLines(int $lines): \StefanZ\LaravelSanctumCaptcha\SecureImage
+    {
+        $this->m_lines = $lines;
+
+        return $this;
+    }
+
+    public function setNumberOfDots(int $dots): \StefanZ\LaravelSanctumCaptcha\SecureImage
+    {
+        $this->m_dots = $dots;
 
         return $this;
     }
@@ -79,13 +109,13 @@ class SecureImage
         $bg_color = imagecolorallocatealpha($this->m_image, $this->m_background[0], $this->m_background[1], $this->m_background[2], $this->m_background[3]);
         imagefill($this->m_image, 0, 0, $bg_color);
 
-        $line_color = imagecolorallocate($this->m_image, rand(0, 255), rand(0, 255), rand(0, 255));
-        for ($i = 0; $i < 10; $i++) {
-            imageline($this->m_image, 0, rand() % 50, 200, rand() % 50, $line_color);
+        for ($i = 0; $i < $this->m_lines; $i++) {
+            $line_color = imagecolorallocate($this->m_image, rand(0, 255), rand(0, 255), rand(0, 255));
+            imageline($this->m_image, rand() % $this->m_width, rand() % $this->m_height, rand() % ($this->m_width * 2), rand() % $this->m_height, $line_color);
         }
 
-        $pixel_color = imagecolorallocate($this->m_image, rand(0, 255), rand(0, 255), rand(0, 255));
-        for ($i = 0; $i < 1000; $i++) {
+        for ($i = 0; $i < $this->m_dots; $i++) {
+            $pixel_color = imagecolorallocate($this->m_image, rand(50, 255), rand(50, 255), rand(50, 255));
             imagesetpixel($this->m_image, rand() % 200, rand() % 50, $pixel_color);
         }
 
@@ -96,7 +126,7 @@ class SecureImage
 
 
             $color = imagecolorallocate($this->m_image, rand(0, 255), rand(0, 255), rand(0, 255));
-            imagettftext($this->m_image, rand(-3, 3) + $this->m_size, rand(-15, 15), ($i * 26) + $this->m_padding, $this->m_padding + 35, $color, $this->m_font, $char);
+            imagettftext($this->m_image, rand(-3, 3) + $this->m_size, rand(-15, 15), ($i * 26) + $this->m_padding, $this->m_padding + 35 + rand(-10, 10), $color, $this->m_font, $char);
         }
 
         $ivlen = openssl_cipher_iv_length($this->m_cipher);
